@@ -22,11 +22,17 @@ transactionRouter.post('/', (request, response) => {
   try {
     const { title, value, type } = request.body;
 
+    const valuePositive = value < 0 ? value * -1 : value;
+
     const createTransaction = new CreateTransactionService(
       transactionsRepository,
     );
 
-    const transaction = createTransaction.execute({ title, value, type });
+    const transaction = createTransaction.execute({
+      title,
+      value: valuePositive,
+      type,
+    });
 
     return response.json(transaction);
   } catch (err) {
